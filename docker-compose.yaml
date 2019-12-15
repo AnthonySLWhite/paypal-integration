@@ -1,0 +1,50 @@
+version: "3"
+services:
+  client:
+    image: node:12
+    depends_on:
+      - server
+    environment:
+      NODE_ENV: dev
+      PORT: 3000
+      CONTAINER_PATH: ${CONTAINER_PATH}
+    ports:
+      - "3000:3000"
+    command: >
+      bash -c "
+      npm install 
+      && npm start"
+    working_dir: ${CONTAINER_PATH}
+    volumes:
+      - ./client:${CONTAINER_PATH}
+      - ${CONTAINER_PATH}/node_modules
+
+  server:
+    image: node:12
+    depends_on:
+      - postgres
+    environment:
+      CONTAINER_PATH: ${CONTAINER_PATH}
+      DATABASE_URL: postgres://user:pass@postgres:5432/db
+      NODE_ENV: dev
+      PORT: 8080
+    ports:
+      - "8080:8080"
+    command: >
+      bash -c "
+      npm install 
+      && npm run watch"
+
+    working_dir: ${CONTAINER_PATH}
+    volumes:
+      - ./server:${CONTAINER_PATH}
+      - ${CONTAINER_PATH}/node_modules
+
+  postgres:
+    image: postgres:10.4
+    ports:
+      - "35432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db

@@ -1,19 +1,15 @@
 import express from 'express';
-import path from 'path';
+import cors from 'cors';
 
-import { PORT } from './configs';
-import routes from "./routes/main";
+import routes from 'Routes';
+import { PORT } from 'Constants/configs';
 
 const app = express();
+app.use(cors());
 app.use(express.json());
-
-
-// Serve the static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use(routes);
 
-// Turn on that server!
 app.listen(PORT, () => {
-    console.log(`Server running on port: ${PORT}`);
+  console.log(`Server running on port: ${PORT}`);
 });

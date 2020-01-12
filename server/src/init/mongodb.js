@@ -1,4 +1,4 @@
-import { MONGO_DB_URL } from '../configs';
+import { MONGO_DB_URL } from 'Constants/configs';
 
 import mongoose from 'mongoose';
 

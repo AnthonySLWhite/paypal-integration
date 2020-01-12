@@ -1,2 +1,2 @@
-import './generateFolderStructure';
-// import './mongodb';
+// import './generateFolderStructure';
+import './database';

@@ -1,4 +1,4 @@
-import { sendEmail } from '../core';
+import { sendEmail } from 'Core';
 
 export async function sendWelcomeEmail(email, name) {
     return sendEmail({

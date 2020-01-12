@@ -1,31 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import axios from 'axios';
+import { parse } from 'query-string';
+
+import IndexScreen from 'Components/screens/Index';
+
+import { API_ENDPOINT } from 'Constants/configs';
 
 function App() {
-    const name = 'Fonzye';
-    return (
-        <div
-            className="App"
-            style={{
-                // backgroundColor: 'red',
-                minWidth: '100%',
-                minHeight: '100%',
-            }}
-        >
-            <Navbar />
-        </div>
-    );
-}
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route exact path="/" component={IndexScreen} />
+        <Route path="/paypal-return">
+          {props => {
+            (async () => {
+              const { search } = props.location;
+              const { code } = parse(search);
+              try {
+                const res = await axios.post(`${API_ENDPOINT}/user`, {
+                  code,
+                });
+                console.log('success', res);
+                // debugger;
+              } catch (error) {
+                console.log('error', error);
 
-function Navbar(props) {
-    return (
-        <header>
-            <ul>
-                <li>Login</li>
-                <li>App area</li>
-            </ul>
-        </header>
-    );
+                // debugger;
+              }
+            })();
+            return null;
+          }}
+        </Route>
+      </Switch>
+    </BrowserRouter>
+  );
 }
 
 export default App;

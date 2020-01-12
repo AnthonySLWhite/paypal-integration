@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { SESSION_SECRET } from '../configs';
-import { User } from '../core/user/model';
+import { SESSION_SECRET } from 'Constants/configs';
+import { User } from 'Core/user/model';
 
 export async function Secured(req, res, next) {
     try {

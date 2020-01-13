@@ -1,8 +1,22 @@
 import { Router } from 'express';
-const router = Router();
+import httpCodes from "http-status-codes";
 
-import ApiRouter from './api';
+import { ErrorHandler } from 'Middleware/error';
+import User from 'Core/user/router';
+import Transactions from 'Core/transactions/router';
 
-router.use('/api', ApiRouter);
+// API ROUTER
+const apiRouter = Router();
+apiRouter.use('/users', User);
+apiRouter.use('/transactions', Transactions);
 
-export default router;
+// Main Router
+const rootRouter = Router();
+rootRouter.use('/api', apiRouter);
+rootRouter.get('/', (req, res) => {
+  res.sendStatus(httpCodes.IM_A_TEAPOT);
+});
+rootRouter.use(ErrorHandler);
+
+// MISC
+export default rootRouter;

@@ -15,18 +15,19 @@ function App() {
         <Route path="/paypal-return">
           {props => {
             (async () => {
+              const { history } = props;
               const { search } = props.location;
               const { code } = parse(search);
               try {
-                const res = await axios.post(`${API_ENDPOINT}/user`, {
+                const res = await axios.post(`${API_ENDPOINT}/users`, {
                   code,
                 });
                 console.log('success', res);
-                // debugger;
               } catch (error) {
-                console.log('error', error);
-
-                // debugger;
+                const { data, status } = error.response;
+                const { message } = data;
+                {/* if (status === 400) history.push('/'); */}
+                console.log(message);
               }
             })();
             return null;

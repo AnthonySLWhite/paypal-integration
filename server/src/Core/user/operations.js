@@ -54,7 +54,7 @@ export async function getPaypalToken(codes) {
 
 /**
  * @typedef {object} getPaypalUserInfoReturnData
- * @property {string} user_id
+ * @property {string} userId
  * @property {string} email
  */
 /**
@@ -79,7 +79,7 @@ export async function getPaypalUserInfo(activeToken) {
       ({ primary }) => primary === true,
     );
 
-    return { email: primaryEmail, user_id };
+    return { email: primaryEmail, userId: user_id };
   } catch ({ response }) {
     const { data } = response;
     console.log(data);

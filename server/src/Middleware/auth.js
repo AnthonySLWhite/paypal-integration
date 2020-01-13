@@ -1,28 +1,21 @@
 import jwt from 'jsonwebtoken';
 import { SESSION_SECRET } from 'Constants/configs';
-import { User } from 'Core/user/model';
 
+/**
+ * Adds ***user*** and ***token*** to request object
+ */
 export async function Secured(req, res, next) {
-    try {
-        const token = req
-            .header('Authorization')
-            .replace('Bearer ', '');
+  try {
+    const token = req.header('Authorization').replace('Bearer ', '');
 
-        const decoded = jwt.verify(token, SESSION_SECRET);
+    const data = jwt.verify(token, SESSION_SECRET);
 
-        const user = await User.findOne({
-            _id: decoded._id,
-            tokens: token,
-        });
-
-        if (!user) throw 'User does not exist!';
-
-        req.user = user;
-        req.token = token;
-        next();
-    } catch (err) {
-        res.status(401).send({
-            error: 'Invalid token provided!',
-        });
-    }
+    req.user = data;
+    req.token = token;
+    next();
+  } catch (err) {
+    res.status(401).send({
+      message: 'Invalid token provided!',
+    });
+  }
 }

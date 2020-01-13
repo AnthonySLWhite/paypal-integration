@@ -64,12 +64,14 @@ export default configs.map(({ basePath, isBrowser }) => {
       url({}),
       commonjs({
         include: isBrowser ? ['node_modules/**'] : [],
+        // include: isBrowser ? ['node_modules/**'] : [],
         // exclude: ['node_modules/process-es6/**'],
       }),
       babel({
         babelrc: false,
         runtimeHelpers: true,
         plugins: [
+          '@babel/plugin-proposal-class-properties',
           [
             '@babel/plugin-transform-runtime',
             {
@@ -98,18 +100,18 @@ export default configs.map(({ basePath, isBrowser }) => {
 
       ...(isBrowser && !isProd
         ? [
-          serve({
-            open: true,
-            verbose: false,
-            contentBase: activeFolder,
-            historyApiFallback: true,
-            host: 'localhost',
-            port: 3000,
-          }),
-          livereload({
-            watch: activeFolder,
-          }),
-        ]
+            serve({
+              open: true,
+              verbose: false,
+              contentBase: activeFolder,
+              historyApiFallback: true,
+              host: 'localhost',
+              port: 3000,
+            }),
+            livereload({
+              watch: activeFolder,
+            }),
+          ]
         : []),
     ],
   };

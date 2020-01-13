@@ -1,2 +1,2 @@
-import './init';
+import './Init';
 import './server';

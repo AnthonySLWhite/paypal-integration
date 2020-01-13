@@ -25,5 +25,6 @@ module.exports = {
     'no-use-before-define': 0,
     'react/state-in-constructor': 0,
     'react/prop-types': 0,
+    'import/extensions': 0,
   },
 };

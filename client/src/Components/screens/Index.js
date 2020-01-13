@@ -9,7 +9,7 @@ export default class Index extends Component {
 
   componentDidMount = async () => {
     try {
-      const res = await axios.get(`${API_ENDPOINT}/user`);
+      const res = await axios.get(`${API_ENDPOINT}/users`);
       console.log(res.data);
       const { link } = res.data;
       this.setState({ link });

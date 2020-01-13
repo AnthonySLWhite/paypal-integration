@@ -3,6 +3,7 @@ module.exports = {
     es6: true,
     node: true,
   },
+  parser: "babel-eslint",
   extends: ['airbnb-base'],
   globals: {
     Atomics: 'readonly',

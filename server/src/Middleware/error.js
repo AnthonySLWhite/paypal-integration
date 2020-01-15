@@ -4,8 +4,6 @@
  */
 export function ErrorHandler(err, req, res, next) {
   try {
-    console.log('here');
-
     if (!(err || {}).customError) {
       throw Error();
     }

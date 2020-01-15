@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import jwt from 'jsonwebtoken';
 
 import Knex from 'Init/database';
@@ -29,42 +30,41 @@ export async function userAuth(req, res, next) {
       [User.refreshToken]: tokens.refresh_token,
     };
 
-    const { data, error } = await User.validate({
-      userId: 5,
-      email: '',
-      refresh_token: 'asd',
-    });
-    console.log({ data, error });
+    const { data, error } = await User.validate(user);
+
     if (error) return res.status(httpCode.BAD_REQUEST).send({ error });
 
-    // try {
-    //   Knex('users')
-    //     .insert(user)
-    //     .catch(async () => {
-    //       try {
-    //         console.log(tokens.refresh_token);
+    try {
+      const res = await Knex('users')
+        .where({ userId: info.userId })
+        .update(user);
 
-    //         const res = await Knex('users').where({ userId }).update(user);
-    //         console.log(res);
-    //       } catch (error) {
-    //         console.log(error);
-    //       }
-    //     });
-    //   // console.log(test);
-    // } catch (error) {
-    //   console.log(error);
-    //   // debugger
-
-    //   // debugger;
-    // }
+      if (res === 0) {
+        const res = await Knex('users').insert(user);
+        // @ts-ignore
+        if (!res?.rowCount) {
+          throw Error;
+        }
+      }
+      // eslint-disable-next-line no-shadow
+    } catch (error) {
+      // If couldn't create user
+      console.error(error);
+      handleError({
+        statusCode: httpCode.INTERNAL_SERVER_ERROR,
+        message: 'Could not create user',
+      });
+    }
     const token = jwt.sign(
       { userId: info.userId, paypalToken: tokens.access_token },
       SESSION_SECRET,
       { expiresIn: tokens.expires_in - 100 },
     );
 
-    return res.status(200).send({ info, token });
+    return res.status(200).send({ user: info, token });
   } catch (error) {
+    console.log(error);
+
     return next(
       handleError({
         message: 'Invalid request',

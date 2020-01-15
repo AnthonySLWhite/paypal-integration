@@ -62,15 +62,11 @@ export default configs.map(({ basePath, isBrowser }) => {
       nodeResolve({}),
       json(),
       url({}),
-      commonjs({
-        include: isBrowser ? ['node_modules/**'] : [],
-        // include: isBrowser ? ['node_modules/**'] : [],
-        // exclude: ['node_modules/process-es6/**'],
-      }),
       babel({
         babelrc: false,
         runtimeHelpers: true,
         plugins: [
+          '@babel/plugin-proposal-optional-chaining',
           '@babel/plugin-proposal-class-properties',
           [
             '@babel/plugin-transform-runtime',
@@ -92,6 +88,12 @@ export default configs.map(({ basePath, isBrowser }) => {
           '@babel/preset-react',
         ],
       }),
+      commonjs({
+        include: isBrowser ? ['node_modules/**'] : [],
+        // include: isBrowser ? ['node_modules/**'] : [],
+        // exclude: ['node_modules/process-es6/**'],
+      }),
+
       filesize(),
 
       ...(isBrowser ? [replace({ 'process.env': process.env })] : []),

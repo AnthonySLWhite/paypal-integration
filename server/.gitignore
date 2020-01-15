@@ -1,41 +1,24 @@
-lib-cov
-*.seed
-*.log
-*.csv
-*.dat
-*.out
-*.pid
-*.gz
-*.swp
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-pids
-logs
-results
-tmp
-
-# Build
-public/css/main.css
-
-# Coverage reports
-coverage
-
-# API keys and secrets
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
 .env
 
-# Dependency directory
-node_modules
-bower_components
+# testing
+/coverage
 
-# Editors
-.idea
-*.iml
+# production
+/build
 
-# OS metadata
+# misc
 .DS_Store
-Thumbs.db
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Ignore built ts files
-dist/**/*
-
-# ignore yarn.lock
-yarn.lock
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

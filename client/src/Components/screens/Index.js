@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import { API_ENDPOINT } from 'Constants/configs';
+import { getPaypalUrl } from 'Operations/paypal';
 
 export default class Index extends Component {
   state = {
@@ -8,14 +7,9 @@ export default class Index extends Component {
   };
 
   componentDidMount = async () => {
-    try {
-      const res = await axios.get(`${API_ENDPOINT}/users`);
-      console.log(res.data);
-      const { link } = res.data;
-      this.setState({ link });
-    } catch (error) {
-      console.log(error);
-    }
+    const link = await getPaypalUrl();
+    if (!link) return;
+    this.setState({ link });
   };
 
   render() {

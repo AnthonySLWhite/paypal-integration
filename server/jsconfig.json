@@ -1,9 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "src",
-    "checkJs": true,
-
-    "allowJs": true
+    "checkJs": true
   },
 
   "include": ["src"],

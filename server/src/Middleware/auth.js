@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { SESSION_SECRET } from 'Constants/configs';
+import { NotAllowedError } from 'Constants/errors';
+import { ErrorHandler } from './error';
 
 /**
  * Adds ***user*** and ***token*** to request object
@@ -14,8 +16,9 @@ export async function Secured(req, res, next) {
     req.token = token;
     next();
   } catch (err) {
-    res.status(401).send({
-      message: 'Invalid token provided!',
-    });
+    const error = NotAllowedError.badToken(
+      'You have supplied an invalid token!',
+    );
+    return ErrorHandler(error, req, res, next);
   }
 }

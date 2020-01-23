@@ -1,4 +1,4 @@
-import { ACTION } from 'Constants/actions';
+import { AUTHENTICATION, RESET_SESSION } from 'Constants/actions';
 import { store } from 'Store';
 
 const { dispatch } = store;
@@ -9,6 +9,10 @@ const { dispatch } = store;
  * @param {object} payload.user
  */
 export const authentication = payload => dispatch({
-  type: ACTION.authentication,
+  type: AUTHENTICATION,
   payload,
+});
+
+export const resetSession = () => dispatch({
+  type: RESET_SESSION,
 });

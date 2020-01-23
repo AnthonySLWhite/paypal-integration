@@ -26,5 +26,6 @@ module.exports = {
     'react/state-in-constructor': 0,
     'react/prop-types': 0,
     'import/extensions': 0,
+    'react/jsx-one-expression-per-line': 0,
   },
 };

@@ -1,14 +1,14 @@
 import { Router } from 'express';
-import httpCodes from "http-status-codes";
+import httpCodes from 'http-status-codes';
 
 import { ErrorHandler } from 'Middleware/error';
-import User from 'Core/user/router';
-import Transactions from 'Core/transactions/router';
+import User from 'Core/user/controller';
+import Transactions from 'Core/transactions/controller';
 
 // API ROUTER
 const apiRouter = Router();
-apiRouter.use('/users', User);
-apiRouter.use('/transactions', Transactions);
+User(apiRouter);
+Transactions(apiRouter);
 
 // Main Router
 const rootRouter = Router();

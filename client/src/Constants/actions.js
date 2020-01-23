@@ -1,4 +1,2 @@
-export const ACTION = {
-  authentication: 'AUTHENTICATION',
-  resetSession: 'RESET_SESSION',
-};
+export const AUTHENTICATION = 'AUTHENTICATION';
+export const RESET_SESSION = 'RESET_SESSION';

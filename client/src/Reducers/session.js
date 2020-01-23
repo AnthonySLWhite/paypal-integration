@@ -1,5 +1,5 @@
 import { REHYDRATE } from 'redux-persist';
-import { ACTION } from 'Constants/actions';
+import { AUTHENTICATION, RESET_SESSION } from 'Constants/actions';
 
 /**
  * @typedef SessionSchema
@@ -26,12 +26,12 @@ export function session(state = INITIAL_STATE, { type, payload }) {
       }
       return state;
 
-    case ACTION.resetSession:
+    case RESET_SESSION:
       return {
         ...INITIAL_STATE,
       };
 
-    case ACTION.authentication:
+    case AUTHENTICATION:
       return {
         ...state,
         isAuthenticated: true,

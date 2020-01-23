@@ -5,9 +5,12 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { persistor, store } from 'Store';
 
-import IndexScreen from 'Components/screens/Index';
+import IndexScreen from 'Components/screens';
+import AppScreen from 'Components/screens/app';
 
 import { PaypalReturn } from 'Components/handlers/paypal-return';
+import { Routes } from 'Constants';
+import AuthenticatedRoute from 'Components/handlers/authenticated-route';
 
 function App() {
   return (
@@ -15,8 +18,9 @@ function App() {
       <Provider store={store}>
         <BrowserRouter>
           <Switch>
-            <Route exact path="/" component={IndexScreen} />
-            <Route path="/paypal-return" component={PaypalReturn} />
+            <Route exact path={Routes.index} component={IndexScreen} />
+            <AuthenticatedRoute exact path={Routes.app} component={AppScreen} />
+            <Route path={Routes.paypalCallback} component={PaypalReturn} />
           </Switch>
         </BrowserRouter>
       </Provider>

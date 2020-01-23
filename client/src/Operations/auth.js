@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { E } from 'Constants';
-import { authentication } from 'Actions/session';
+import { authentication, resetSession } from 'Actions/session';
 
 export async function signIn(code) {
   try {
@@ -17,4 +17,8 @@ export async function signIn(code) {
   } catch (error) {
     return false;
   }
+}
+
+export function logout() {
+  resetSession();
 }

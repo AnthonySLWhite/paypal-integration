@@ -3,7 +3,7 @@ import ReduxThunk from 'redux-thunk';
 import { persistStore, persistCombineReducers } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-import { session } from 'Reducers/session';
+import { session, SessionSchema } from 'Reducers/session';
 
 const isDevVersion = process.env.NODE_ENV === 'development';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -29,7 +29,7 @@ const reducers = persistCombineReducers(config, {
 
 /**
  * @typedef StoreState
- * @property {session} session
+ * @property {SessionSchema} session
  */
 
 export const store = createStore(

@@ -15,7 +15,6 @@ export function ErrorHandler(err, req, res, next) {
         errorCode,
       };
       if (description) toSend.description = description;
-      debugger
       if (serverError) console.error(serverError);
       return res.status(httpCode).send(toSend);
     }

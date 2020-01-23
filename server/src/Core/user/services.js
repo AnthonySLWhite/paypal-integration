@@ -1,12 +1,9 @@
 /* eslint-disable no-shadow */
-import jwt from 'jsonwebtoken';
-
-import Knex from 'Init/database';
-import { SESSION_SECRET } from 'Constants/configs';
-import httpCode from 'http-status-codes';
+import {DB} from 'Init/database';
 
 import { InvalidError, UnexpectedError } from 'Constants/errors';
-import { getPaypalToken, getPaypalUserInfo } from '../../Services/paypal_auth';
+import { generateJwtToken } from 'Services/tokens';
+import { getPaypalToken, getPaypalUserInfo } from 'Services/paypal_auth';
 import { User } from './model';
 
 /** @param {string} paypalAuthCode
@@ -15,16 +12,14 @@ import { User } from './model';
   */
 export async function userAuth(paypalAuthCode) {
   try {
-    // debugger;
     const tokens = await getPaypalToken({ initialCode: paypalAuthCode });
-    // console.timeLog('Request');
     if (!tokens) return [true, InvalidError.code('PayPal code is invalid!')];
 
-    const info = await getPaypalUserInfo(tokens.access_token);
+    const userInfo = await getPaypalUserInfo(tokens.access_token);
 
     const user = {
-      [User.userId]: info.userId,
-      [User.email]: info.email,
+      [User.userId]: userInfo.userId,
+      [User.email]: userInfo.email,
       [User.refreshToken]: tokens.refresh_token,
     };
 
@@ -33,12 +28,12 @@ export async function userAuth(paypalAuthCode) {
     if (error) return [true, InvalidError.schema(data)];
 
     try {
-      const res = await Knex('users')
-        .where({ userId: info.userId })
+      const res = await DB(User.table)
+        .where({ userId: userInfo.userId })
         .update(user);
 
       if (res === 0) {
-        const res = await Knex('users').insert(user);
+        const res = await DB(User.table).insert(user);
         // @ts-ignore
         if (!res?.rowCount) {
           throw Error;
@@ -52,13 +47,12 @@ export async function userAuth(paypalAuthCode) {
       // If couldn't create user
       return [true, UnexpectedError.creating('Could not create user', error)];
     }
-    const token = jwt.sign(
-      { userId: info.userId, paypalToken: tokens.access_token },
-      SESSION_SECRET,
-      { expiresIn: tokens.expires_in - 100 },
-    );
 
-    return [false, { user: info, token }];
+    const token = generateJwtToken(
+      { userId: userInfo.userId, paypalToken: tokens.access_token },
+      tokens.expires_in,
+    );
+    return [false, { user: userInfo, token }];
   } catch (error) {
     return [true, UnexpectedError.general()];
   }

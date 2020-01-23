@@ -9,7 +9,7 @@ export function PaypalReturn(props) {
   const { code } = parse(search);
 
   signIn(code).then(res => {
-    if (!res) return history.push(Routes.app);
+    if (res) return history.push(Routes.app);
   });
 
   return <h1>Success</h1>;

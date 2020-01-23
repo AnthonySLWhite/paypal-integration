@@ -2,6 +2,7 @@
 import Joi from '@hapi/joi';
 
 const User = {
+  table: 'users',
   userId: 'userId',
   refreshToken: 'refreshToken',
   email: 'email',

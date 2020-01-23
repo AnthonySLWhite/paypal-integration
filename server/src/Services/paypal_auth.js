@@ -1,6 +1,6 @@
 import queryString from 'querystring';
 import axios from 'axios';
-import { PAYPAL_ID, PAYPAL_SECRET, PAYPAL_API_URL } from 'Constants/configs';
+import { PAYPAL_ID, PAYPAL_SECRET } from 'Constants/configs';
 import { E } from 'Constants/endpoints';
 
 /**
@@ -64,15 +64,12 @@ export async function getPaypalToken(codes) {
  */
 export async function getPaypalUserInfo(activeToken) {
   try {
-    const res = await axios.get(
-      E.paypal.auth.getUserInfo(),
-      {
-        headers: {
-          Authorization: `Bearer ${activeToken}`,
-          'Content-Type': 'application/json',
-        },
+    const res = await axios.get(E.paypal.auth.getUserInfo(), {
+      headers: {
+        Authorization: `Bearer ${activeToken}`,
+        'Content-Type': 'application/json',
       },
-    );
+    });
     const { data } = res;
     const { user_id, emails = [] } = data;
 

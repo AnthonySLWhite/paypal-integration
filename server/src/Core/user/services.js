@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import {DB} from 'Init/database';
+import { DB } from 'Init/database';
 
 import { InvalidError, UnexpectedError } from 'Constants/errors';
 import { generateJwtToken } from 'Services/tokens';
@@ -25,7 +25,7 @@ export async function userAuth(paypalAuthCode) {
 
     const { data, error } = await User.validate(user);
 
-    if (error) return [true, InvalidError.schema(data)];
+    if (error) return [true, InvalidError.schema(error)];
 
     try {
       const res = await DB(User.table)
@@ -54,6 +54,6 @@ export async function userAuth(paypalAuthCode) {
     );
     return [false, { user: userInfo, token }];
   } catch (error) {
-    return [true, UnexpectedError.general()];
+    return [true, UnexpectedError.general(null, error)];
   }
 }

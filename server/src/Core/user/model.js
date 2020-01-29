@@ -13,7 +13,7 @@ const User = {
 const userSchema = Joi.object({
   [User.userId]: Joi.string().required(),
   [User.refreshToken]: Joi.string().required(),
-  [User.email]: Joi.string().required(),
+  [User.email]: Joi.string().allow(null),
 });
 
 User.validate = async data => {

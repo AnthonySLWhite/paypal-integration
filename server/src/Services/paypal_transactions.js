@@ -42,6 +42,7 @@ export async function getPaypalTransactions(token, startDate, EndDate) {
         Authorization: `Bearer  ${token}`,
       },
     });
+    console.log(res);
     const { data: Transactions } = res;
     const { total_pages } = Transactions;
 
@@ -54,7 +55,8 @@ export async function getPaypalTransactions(token, startDate, EndDate) {
         headers: {
           Authorization: `Bearer  ${token}`,
         },
-      }));
+      }),
+    );
 
     const resolvedPages = await Promise.all(pagesRequest);
 
@@ -69,8 +71,6 @@ export async function getPaypalTransactions(token, startDate, EndDate) {
     return Transactions;
   } catch (error) {
     console.log(error.response.data);
-
-    // debugger
   }
 }
 
@@ -81,8 +81,11 @@ export async function getUsersPaypalTransactions(startDate, EndDate) {
 
   users.forEach(user => {
     const { [User.userId]: userId, [User.refreshToken]: refreshToken } = user;
+    console.log(`Getting user: ${userId}`);
 
-    getPaypalToken({ refreshToken }).then(async ({ access_token }) => {
+    getPaypalToken({ refreshToken }).then(async res => {
+      if (!res) return;
+      const { access_token } = res;
       const transactions = await getPaypalTransactions(
         access_token,
         startDate,

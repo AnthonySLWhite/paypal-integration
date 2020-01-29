@@ -10,7 +10,7 @@ exports.up = knex => knex.schema
       .unique();
 
     table.string('refreshToken').notNullable();
-    table.string('email').notNullable();
+    table.string('email');
   })
 
   .createTable('transactions', table => {

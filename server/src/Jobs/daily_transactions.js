@@ -4,12 +4,12 @@ import { getUsersPaypalTransactions } from 'Services/paypal_transactions';
 
 /** Get Daily Transactions */
 // cron.schedule('0 0 0 * * *', () => {
-cron.schedule('*/30 * * * * *', () => {
-  const startOfToday = dateFns.startOfToday();
-  const startOfYesterday = dateFns.startOfYesterday();
+const startOfToday = dateFns.startOfToday();
+const startOfYesterday = dateFns.startOfYesterday();
 
-  const todaysMidnightTime = dateFns.formatISO(startOfToday);
-  const yesterdayMidnightTime = dateFns.formatISO(startOfYesterday);
-  getUsersPaypalTransactions(yesterdayMidnightTime, todaysMidnightTime);
-  // getPaypalTransactions(yesterdayMidnightTime, todaysMidnightTime);
-});
+const todaysMidnightTime = dateFns.formatISO(startOfToday);
+const yesterdayMidnightTime = dateFns.formatISO(startOfYesterday);
+getUsersPaypalTransactions(yesterdayMidnightTime, todaysMidnightTime);
+// cron.schedule('*/30 * * * * *', () => {
+//   // getPaypalTransactions(yesterdayMidnightTime, todaysMidnightTime);
+// });

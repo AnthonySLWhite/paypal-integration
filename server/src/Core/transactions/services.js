@@ -10,9 +10,8 @@ import { Transaction } from './model';
  * @param {string} userId
  * @param {Transaction[]} transactions
  *
- * @returns {Promise<
-    GenericResponse<null|object>>}
-  */
+ * @returns {Promise<GenericResponse<null|object>>}
+ */
 export async function addTransaction(userId, transactions) {
   try {
     const transactionsToValidate = transactions.map(transactionData => {
@@ -84,8 +83,24 @@ export async function addTransaction(userId, transactions) {
       const res = await DB(Transaction.table).insert(parsedTransactions);
       return [false, null];
     } catch (error) {
-      return [true, UnexpectedError.creating('Could not insert transactions!', error)];
+      return [
+        true,
+        UnexpectedError.creating('Could not insert transactions!', error),
+      ];
     }
+  } catch (error) {
+    return [true, UnexpectedError.general(null, error)];
+  }
+}
+
+/**
+ * @param {string} userId
+ * @returns {Promise<GenericResponse<null|object>>}
+ */
+export async function getTransactions(userId) {
+  try {
+    const res = await DB(Transaction.table).where({ [Transaction.userId]: userId });
+    return [false, res || null];
   } catch (error) {
     return [true, UnexpectedError.general(null, error)];
   }

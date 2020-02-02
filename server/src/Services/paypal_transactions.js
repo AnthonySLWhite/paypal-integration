@@ -95,7 +95,6 @@ export async function getUsersPaypalTransactions(startDate, EndDate) {
       console.log(transactions);
 
       const parsedTransactions = parsePaypalTransactions(transactions);
-      debugger
       addTransaction(userId, parsedTransactions);
     });
   });

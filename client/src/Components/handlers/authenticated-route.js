@@ -1,12 +1,23 @@
 import React from 'react';
-import { store } from 'Store';
 import { Route, Redirect } from 'react-router-dom';
 import { Routes } from 'Constants';
+import { connect } from 'react-redux';
 
 /** @param {import('react-router-dom').RouteProps} props  */
-export default function AuthenticatedRoute(props) {
-  const { session } = store.getState();
-  const { isAuthenticated } = session;
-  if (isAuthenticated) return <Route {...props} />;
+function AuthenticatedRoute(props) {
+  const { isAuthenticated, ...parsedProps } = props;
+
+  if (isAuthenticated) return <Route {...parsedProps} />;
   return <Redirect to={Routes.index} />;
 }
+
+/** @param {import('Store').StoreState} store */
+function mapStateToProps(store) {
+  const { session } = store;
+  const { isAuthenticated } = session;
+
+  return {
+    isAuthenticated,
+  };
+}
+export default connect(mapStateToProps)(AuthenticatedRoute);

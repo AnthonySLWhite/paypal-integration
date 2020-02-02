@@ -1,6 +1,8 @@
 import { Router } from 'express';
 
-import { PAYPAL_ID, PAYPAL_PROD, REDIRECT_URI } from 'Constants/configs';
+import {
+  PAYPAL_ID, PAYPAL_PROD, REDIRECT_URI, PAYPAL_API_URL,
+} from 'Constants/configs';
 
 // import { Secured, ValidateID } from 'Middleware';
 import { userAuth } from './services';
@@ -10,7 +12,7 @@ const router = Router();
 
 router.get('/', (req, res) => {
   res.send({
-    link: `https://www.${PAYPAL_PROD ? '' : 'sandbox.'}paypal.com/connect?flowEntry=static&client_id=${PAYPAL_ID}&scope=openid&redirect_uri=${REDIRECT_URI}`,
+    link: `${PAYPAL_API_URL.replace('api.', 'www.')}/connect?flowEntry=static&client_id=${PAYPAL_ID}&scope=openid&redirect_uri=${REDIRECT_URI}`,
   });
 });
 

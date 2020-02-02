@@ -18,7 +18,7 @@ class App extends Component {
 
   render() {
     const { user } = this.props;
-    const { email } = user;
+    const { email } = user || {};
     const name = email ? email.split('@')[0] : 'user';
 
     return (

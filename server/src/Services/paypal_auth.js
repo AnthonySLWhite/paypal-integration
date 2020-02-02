@@ -49,6 +49,9 @@ export async function getPaypalToken(codes) {
 
     return dataToReturn;
   } catch (err) {
+    console.error(err);
+    console.error(err.response);
+
     return null;
   }
 }
@@ -72,12 +75,16 @@ export async function getPaypalUserInfo(activeToken) {
     });
     const { data } = res;
     const { user_id, emails = [] } = data;
+    let email = null;
 
-    const { value: primaryEmail } = emails.find(
-      ({ primary }) => primary === true,
-    );
+    if (emails.length) {
+      const { value: primaryEmail } = emails.find(
+        ({ primary }) => primary === true,
+      );
+      email = primaryEmail;
+    }
 
-    return { email: primaryEmail, userId: user_id };
+    return { email, userId: user_id };
   } catch ({ response }) {
     const { data } = response;
     console.log(data);

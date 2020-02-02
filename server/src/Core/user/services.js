@@ -22,7 +22,6 @@ export async function userAuth(paypalAuthCode) {
       [User.email]: userInfo.email,
       [User.refreshToken]: tokens.refresh_token,
     };
-
     const { data, error } = await User.validate(user);
 
     if (error) return [true, InvalidError.schema(error)];

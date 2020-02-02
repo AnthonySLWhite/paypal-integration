@@ -4,6 +4,7 @@ import queryString from 'querystring';
 import { E } from 'Constants/endpoints';
 import { DB } from 'Init/database';
 import { User } from 'Core/user/model';
+import { addTransaction } from 'Core/transactions/services';
 import { getPaypalToken } from './paypal_auth';
 
 export async function getPaypalTransactions(token, startDate, EndDate) {
@@ -42,29 +43,29 @@ export async function getPaypalTransactions(token, startDate, EndDate) {
         Authorization: `Bearer  ${token}`,
       },
     });
-    console.log(res);
     const { data: Transactions } = res;
     const { total_pages } = Transactions;
 
     if (!total_pages) return Transactions;
 
-    const pages = Array(total_pages - 1);
+    const pages = Array(total_pages - 1).fill(null);
 
     const pagesRequest = pages.map((page, i) =>
       Axios.get(E.paypal.transactions.get(getQueryParams(i + 2)), {
         headers: {
           Authorization: `Bearer  ${token}`,
         },
-      }),
-    );
+      }));
 
     const resolvedPages = await Promise.all(pagesRequest);
 
-    resolvedPages.forEach(({ data, status }) => {
+    resolvedPages.forEach(res => {
+      if (!res) return;
+      const { data, status } = res;
       if (!data && status === 200) return;
       const { transaction_details } = data;
       if (transaction_details && transaction_details.length) {
-        Transactions.transaction_details.concat(transaction_details);
+        Transactions.transaction_details = Transactions.transaction_details.concat(transaction_details);
       }
     });
 
@@ -92,6 +93,44 @@ export async function getUsersPaypalTransactions(startDate, EndDate) {
         EndDate,
       );
       console.log(transactions);
+
+      const parsedTransactions = parsePaypalTransactions(transactions);
+      debugger
+      addTransaction(userId, parsedTransactions);
     });
+  });
+}
+
+function parsePaypalTransactions(transactions) {
+  const { transaction_details = [], account_number } = transactions;
+
+  return transaction_details.map((transaction) => {
+    const {
+      transaction_id,
+      paypal_reference_id,
+      paypal_reference_id_type,
+      transaction_event_code,
+      transaction_initiation_date,
+      transaction_updated_date,
+      transaction_amount,
+      transaction_status,
+      ending_balance,
+      available_balance,
+      protection_eligibility,
+    } = transaction.transaction_info;
+
+    const { currency_code, value: amount } = transaction_amount;
+    const { value: endingBalance } = ending_balance;
+
+    /** @type {Transaction} */
+    const parsedTransaction = {
+      transactionId: transaction_id,
+      isoDate: transaction_initiation_date,
+      referenceId: paypal_reference_id,
+      currency: currency_code,
+      gross: amount,
+      balance: endingBalance,
+    };
+    return parsedTransaction;
   });
 }

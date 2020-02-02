@@ -9,7 +9,8 @@ const startOfYesterday = dateFns.startOfYesterday();
 
 const todaysMidnightTime = dateFns.formatISO(startOfToday);
 const yesterdayMidnightTime = dateFns.formatISO(startOfYesterday);
-getUsersPaypalTransactions(yesterdayMidnightTime, todaysMidnightTime);
+
+getUsersPaypalTransactions('2019-12-30T00:00:00Z', '2019-12-31T00:00:00Z');
 // cron.schedule('*/30 * * * * *', () => {
 //   // getPaypalTransactions(yesterdayMidnightTime, todaysMidnightTime);
 // });

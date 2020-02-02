@@ -14,6 +14,7 @@ class App extends Component {
     try {
       const res = await axios.get(E.transactions.get());
       const { data } = res;
+
       this.setState({ transactions: data });
     } catch (error) {
       debugger;
@@ -39,7 +40,6 @@ class App extends Component {
             fromEmail,
             referenceId,
           } = transaction;
-          console.log(transaction);
 
           return (
             <div className="flex justify-between items-center p-5 shadow">

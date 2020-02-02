@@ -12,5 +12,5 @@ export function PaypalReturn(props) {
     if (res) return history.push(Routes.app);
   });
 
-  return <h1>Success</h1>;
+  return <h1>Processing PayPal Login</h1>;
 }

@@ -1,5 +1,7 @@
 /** @typedef Transaction
- * @property {string} [isoDate]
+ * @property {string} [date]
+ * @property {string} [time]
+ * @property {string} [timeZone]
  * @property {string} [description]
  * @property {string} [currency]
  * @property {number} [gross]

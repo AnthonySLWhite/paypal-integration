@@ -1,7 +1,6 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable consistent-return */
 import { DB } from 'Init/database';
-import dateFns from 'date-fns';
 
 import { InvalidError, UnexpectedError } from 'Constants/errors';
 import { Transaction } from './model';
@@ -12,12 +11,14 @@ import { Transaction } from './model';
  *
  * @returns {Promise<GenericResponse<null|object>>}
  */
-export async function addTransaction(userId, transactions) {
+export async function addTransactions(userId, transactions) {
   try {
     const transactionsToValidate = transactions.map(transactionData => {
       const {
         transactionId,
-        isoDate,
+        date,
+        time,
+        timeZone,
         referenceId,
         currency,
         gross,
@@ -34,10 +35,6 @@ export async function addTransaction(userId, transactions) {
         shippingAndHandlingAmount,
       } = transactionData;
 
-      const parsedDate = dateFns.parseISO(isoDate);
-      const date = dateFns.format(parsedDate, 'dd.MM.yyyy');
-      const time = dateFns.format(parsedDate, 'k:mm:ss');
-      const timeZone = dateFns.format(parsedDate, 'OOOO');
 
       return {
         [Transaction.userId]: userId,

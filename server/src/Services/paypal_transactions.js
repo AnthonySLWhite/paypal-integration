@@ -1,10 +1,11 @@
 import Axios from 'axios';
 import queryString from 'querystring';
+import dateFns from 'date-fns';
 
 import { E } from 'Constants/endpoints';
 import { DB } from 'Init/database';
 import { User } from 'Core/user/model';
-import { addTransaction } from 'Core/transactions/services';
+import { addTransactions } from 'Core/transactions/services';
 import { getPaypalToken } from './paypal_auth';
 
 export async function getPaypalTransactions(token, startDate, EndDate) {
@@ -95,7 +96,7 @@ export async function getUsersPaypalTransactions(startDate, EndDate) {
       console.log(transactions);
 
       const parsedTransactions = parsePaypalTransactions(transactions);
-      addTransaction(userId, parsedTransactions);
+      addTransactions(userId, parsedTransactions);
     });
   });
 }
@@ -121,10 +122,17 @@ function parsePaypalTransactions(transactions) {
     const { currency_code, value: amount } = transaction_amount;
     const { value: endingBalance } = ending_balance;
 
+    const parsedDate = dateFns.parseISO(transaction_initiation_date);
+    const date = dateFns.format(parsedDate, 'dd.MM.yyyy');
+    const time = dateFns.format(parsedDate, 'k:mm:ss');
+    const timeZone = dateFns.format(parsedDate, 'OOOO');
+
     /** @type {Transaction} */
     const parsedTransaction = {
       transactionId: transaction_id,
-      isoDate: transaction_initiation_date,
+      date,
+      time,
+      timeZone,
       referenceId: paypal_reference_id,
       currency: currency_code,
       gross: amount,

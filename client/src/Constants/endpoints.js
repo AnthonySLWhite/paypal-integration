@@ -6,6 +6,7 @@ export const E = {
   },
   transactions: {
     get: () => `${API_ENDPOINT}/transactions`,
+    post: () => `${API_ENDPOINT}/transactions`,
   },
   paypal: {
     getLink: () => `${API_ENDPOINT}/users`,
